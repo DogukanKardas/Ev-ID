@@ -17,6 +17,7 @@ interface Testimonial {
   company: string
   text: string
   language: string
+  location: string | null
   order_index: number
   is_active: boolean
 }
@@ -29,6 +30,7 @@ export default function AdminTestimonials() {
     company: "",
     text: "",
     language: "tr",
+    location: "",
     order_index: 0,
     is_active: true,
   })
@@ -67,22 +69,50 @@ export default function AdminTestimonials() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (editing) {
-      await supabase.from("testimonials").update(formData).eq("id", editing.id)
-    } else {
-      await supabase.from("testimonials").insert([formData])
-    }
+    try {
+      const submitData = {
+        ...formData,
+        location: formData.location.trim() || null, // Empty string'i null'a çevir
+      }
 
-    setEditing(null)
-    setFormData({
-      name: "",
-      company: "",
-      text: "",
-      language: "tr",
-      order_index: 0,
-      is_active: true,
-    })
-    fetchTestimonials()
+      if (editing) {
+        const { error } = await supabase
+          .from("testimonials")
+          .update(submitData)
+          .eq("id", editing.id)
+
+        if (error) {
+          alert("Güncelleme hatası: " + error.message)
+          console.error("Update error:", error)
+          return
+        }
+        alert("Yorum başarıyla güncellendi!")
+      } else {
+        const { error } = await supabase.from("testimonials").insert([submitData])
+
+        if (error) {
+          alert("Ekleme hatası: " + error.message)
+          console.error("Insert error:", error)
+          return
+        }
+        alert("Yorum başarıyla eklendi!")
+      }
+
+      setEditing(null)
+      setFormData({
+        name: "",
+        company: "",
+        text: "",
+        language: "tr",
+        location: "",
+        order_index: 0,
+        is_active: true,
+      })
+      fetchTestimonials()
+    } catch (error: any) {
+      alert("Bir hata oluştu: " + (error?.message || "Bilinmeyen hata"))
+      console.error("Submit error:", error)
+    }
   }
 
   const handleDelete = async (id: string) => {
@@ -99,9 +129,17 @@ export default function AdminTestimonials() {
       company: testimonial.company,
       text: testimonial.text,
       language: testimonial.language,
+      location: testimonial.location || "",
       order_index: testimonial.order_index,
       is_active: testimonial.is_active,
     })
+    // Forma scroll yap
+    setTimeout(() => {
+      const formCard = document.querySelector('[data-form-card]')
+      if (formCard) {
+        formCard.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }, 100)
   }
 
   return (
@@ -118,7 +156,7 @@ export default function AdminTestimonials() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
-          <Card className="bg-white/10 backdrop-blur-md border-white/20">
+          <Card className="bg-white/10 backdrop-blur-md border-white/20" data-form-card>
             <CardHeader>
               <CardTitle className="text-white">
                 {editing ? "Yorum Düzenle" : "Yeni Yorum Ekle"}
@@ -148,6 +186,18 @@ export default function AdminTestimonials() {
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                     className="bg-white/10 border-white/20 text-white mt-2"
                     required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="location" className="text-white">
+                    Konum (Şehir/Ülke)
+                  </Label>
+                  <Input
+                    id="location"
+                    value={formData.location}
+                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                    className="bg-white/10 border-white/20 text-white mt-2"
+                    placeholder="Örn: İstanbul, Türkiye veya New York, USA"
                   />
                 </div>
                 <div>
@@ -216,6 +266,7 @@ export default function AdminTestimonials() {
                           company: "",
                           text: "",
                           language: "tr",
+                          location: "",
                           order_index: 0,
                           is_active: true,
                         })
@@ -242,6 +293,9 @@ export default function AdminTestimonials() {
                       <div>
                         <p className="text-white font-semibold">{testimonial.name}</p>
                         <p className="text-white/60 text-sm">{testimonial.company}</p>
+                        {testimonial.location && (
+                          <p className="text-white/50 text-xs mt-1">📍 {testimonial.location}</p>
+                        )}
                         <p className="text-white/40 text-xs mt-1">
                           {testimonial.language === "tr" ? "Türkçe" : "English"} • Sıra: {testimonial.order_index}
                           {!testimonial.is_active && (

@@ -13,6 +13,7 @@ interface Testimonial {
   company: string
   text: string
   language: string
+  location: string | null
 }
 
 export default function TestimonialsSection() {
@@ -93,6 +94,9 @@ export default function TestimonialsSection() {
                   <div>
                     <p className="text-white font-semibold">{testimonial.name}</p>
                     <p className="text-white/60 text-sm">{testimonial.company}</p>
+                    {testimonial.location && (
+                      <p className="text-white/50 text-xs mt-1">📍 {testimonial.location}</p>
+                    )}
                   </div>
                 </CardContent>
               </Card>
