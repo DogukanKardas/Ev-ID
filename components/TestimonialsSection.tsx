@@ -1,55 +1,68 @@
 "use client"
 
+import { useEffect, useState } from "react"
+import { supabase } from "@/lib/supabase"
 import { Card, CardContent } from "@/components/ui/card"
 import { motion } from "framer-motion"
 import { Quote } from "lucide-react"
 import { useLocale } from "@/components/LocaleProvider"
 
+interface Testimonial {
+  id: string
+  name: string
+  company: string
+  text: string
+  language: string
+}
+
 export default function TestimonialsSection() {
-  const { t, isInternational } = useLocale()
-  
-  // Different testimonials for international vs local
-  const testimonials = isInternational
-    ? [
-        {
-          id: 1,
-          name: "John Smith",
-          company: "Global Tech Corp",
-          text: "Evrentek Technology provided excellent cloud solutions for our international operations. Their expertise and support are outstanding.",
-        },
-        {
-          id: 2,
-          name: "Sarah Johnson",
-          company: "International Solutions Ltd",
-          text: "Professional team with deep technical knowledge. They helped us scale our infrastructure globally with great success.",
-        },
-        {
-          id: 3,
-          name: "Michael Chen",
-          company: "Worldwide Enterprises",
-          text: "Outstanding cybersecurity services and innovative approaches. Evrentek is our trusted partner for global projects.",
-        },
-      ]
-    : [
-        {
-          id: 1,
-          name: "Ahmet Yılmaz",
-          company: "ABC Teknoloji",
-          text: "Evrentek Teknoloji ile çalışmak harika bir deneyimdi. Profesyonel ekibi ve kaliteli hizmetleri sayesinde işlerimizi çok daha verimli hale getirdik.",
-        },
-        {
-          id: 2,
-          name: "Ayşe Demir",
-          company: "XYZ Şirketi",
-          text: "Teknik destek ekibi çok hızlı ve çözüm odaklı. Her sorunumuzda yanımızda oldular. Kesinlikle tavsiye ederim.",
-        },
-        {
-          id: 3,
-          name: "Mehmet Kaya",
-          company: "DEF A.Ş.",
-          text: "Modern çözümleri ve yenilikçi yaklaşımları ile sektörde öncü bir firma. Projelerimizde her zaman ilk tercihimiz.",
-        },
-      ]
+  const { t, language, isInternational } = useLocale()
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchTestimonials() {
+      const currentLanguage = language || (isInternational ? "en" : "tr")
+      
+      const { data, error } = await supabase
+        .from("testimonials")
+        .select("*")
+        .eq("is_active", true)
+        .eq("language", currentLanguage)
+        .order("order_index", { ascending: true })
+
+      if (error) {
+        console.error("Error fetching testimonials:", error)
+        // Fallback to empty array if error
+        setTestimonials([])
+      } else if (data && data.length > 0) {
+        setTestimonials(data)
+      } else {
+        // Fallback to empty array if no testimonials found
+        setTestimonials([])
+      }
+      setLoading(false)
+    }
+    fetchTestimonials()
+  }, [language, isInternational])
+
+  if (loading) {
+    return (
+      <section id="testimonials" className="py-20 px-4 bg-[#0A0A0A]">
+        <div className="container mx-auto">
+          <div className="mb-12 text-center">
+            <h2 className="text-4xl font-bold text-white mb-4">{t("testimonials")}</h2>
+            <p className="text-white/60">{t("testimonialsSubtitle")}</p>
+          </div>
+          <div className="text-center text-white/60">Yükleniyor...</div>
+        </div>
+      </section>
+    )
+  }
+
+  if (testimonials.length === 0) {
+    return null // Don't show section if no testimonials
+  }
 
   return (
     <section id="testimonials" className="py-20 px-4 bg-[#0A0A0A]">

@@ -3,7 +3,6 @@
 import { useState } from "react"
 import Header from "@/components/Header"
 import HeroSection from "@/components/HeroSection"
-import QuickLinksSection from "@/components/QuickLinksSection"
 import ServicesSection from "@/components/ServicesSection"
 import TeamSection from "@/components/TeamSection"
 import TestimonialsSection from "@/components/TestimonialsSection"
@@ -28,7 +27,6 @@ export default function Home() {
     <main className="min-h-screen bg-[#0A0A0A]">
       <Header />
       <HeroSection />
-      <QuickLinksSection />
       <AnnouncementsSection />
       <CaseStudiesSection />
       <ServicesSection />

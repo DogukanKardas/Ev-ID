@@ -15,6 +15,7 @@ import {
   FileText,
   FolderOpen,
   MessageSquare,
+  Star,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -61,6 +62,7 @@ export default function AdminDashboard() {
     { icon: MessageSquare, title: "Teklifler", href: "/admin/quotes", color: "text-pink-400" },
     { icon: FolderOpen, title: "Projeler", href: "/admin/case-studies", color: "text-cyan-400" },
     { icon: FileText, title: "Kaynaklar", href: "/admin/resources", color: "text-red-400" },
+    { icon: Star, title: "Müşteri Yorumları", href: "/admin/testimonials", color: "text-yellow-300" },
   ]
 
   const handleLogout = async () => {
