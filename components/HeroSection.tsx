@@ -16,7 +16,7 @@ export default function HeroSection() {
       const { data } = await supabase
         .from("settings")
         .select("key, value")
-        .in("key", ["whatsapp", "phone", "company_name"])
+        .in("key", ["whatsapp", "phone", "company_name", "logo_url"])
 
       if (data) {
         const settingsMap: Record<string, string> = {}
@@ -35,7 +35,7 @@ export default function HeroSection() {
   const phoneUrl = settings.phone ? `tel:${settings.phone}` : null
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0A0A0A] via-[#002D5B] to-[#0A0A0A] pt-20">
+    <section className="relative min-h-screen flex items-center justify-center bg-black pt-20">
       <div className="container mx-auto px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -50,9 +50,17 @@ export default function HeroSection() {
               className="inline-block mb-6"
             >
               <div className="relative w-32 h-32 md:w-40 md:h-40 mx-auto flex items-center justify-center">
-                <div className="w-full h-full bg-gradient-to-br from-secondary to-primary rounded-2xl flex items-center justify-center shadow-2xl">
-                  <span className="text-4xl md:text-5xl font-bold text-white">ET</span>
-                </div>
+                {settings.logo_url ? (
+                  <img
+                    src={settings.logo_url}
+                    alt={settings.company_name || t("companyName")}
+                    className="w-full h-full object-contain rounded-2xl"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-secondary to-primary rounded-2xl flex items-center justify-center shadow-2xl">
+                    <span className="text-4xl md:text-5xl font-bold text-white">ET</span>
+                  </div>
+                )}
               </div>
             </motion.div>
           </div>

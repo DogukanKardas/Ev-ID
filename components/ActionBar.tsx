@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
-import { MessageCircle, Phone, Linkedin, Download, Mail } from "lucide-react"
-import { motion } from "framer-motion"
+import { MessageCircle, Phone, Linkedin, Download, Mail, Menu, X } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 import { useLocale } from "@/components/LocaleProvider"
 
 export default function ActionBar() {
@@ -12,6 +12,7 @@ export default function ActionBar() {
   const [settings, setSettings] = useState<Record<string, string>>({})
   const [isVisible, setIsVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   useEffect(() => {
     async function fetchSettings() {
@@ -115,85 +116,159 @@ END:VCARD`
     })()
   }
 
+  // Close menu when clicking outside
+  useEffect(() => {
+    if (isMenuOpen) {
+      const handleClickOutside = (event: MouseEvent) => {
+        const target = event.target as HTMLElement
+        if (!target.closest(".action-bar-menu")) {
+          setIsMenuOpen(false)
+        }
+      }
+      document.addEventListener("mousedown", handleClickOutside)
+      return () => document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [isMenuOpen])
+
   if (!whatsappUrl && !phoneUrl && !linkedinUrl && !emailUrl) {
     return null
   }
 
+  interface MenuItem {
+    key: string
+    icon: typeof MessageCircle
+    label: string
+    color: string
+    onClick: () => void
+  }
+
+  const menuItems: MenuItem[] = []
+  
+  if (whatsappUrl) {
+    menuItems.push({
+      key: "whatsapp",
+      icon: MessageCircle,
+      label: "WhatsApp",
+      color: "bg-[#25D366] hover:bg-[#25D366]/90 text-white",
+      onClick: () => {
+        trackClick("whatsapp_click")
+        window.open(whatsappUrl, "_blank")
+        setIsMenuOpen(false)
+      },
+    })
+  }
+  
+  if (phoneUrl) {
+    menuItems.push({
+      key: "phone",
+      icon: Phone,
+      label: t("ara"),
+      color: "bg-white/10 border-white/20 text-white hover:bg-white/20",
+      onClick: () => {
+        trackClick("phone_click")
+        window.location.href = phoneUrl
+        setIsMenuOpen(false)
+      },
+    })
+  }
+  
+  if (linkedinUrl) {
+    menuItems.push({
+      key: "linkedin",
+      icon: Linkedin,
+      label: "LinkedIn",
+      color: "bg-white/10 border-white/20 text-white hover:bg-white/20",
+      onClick: () => {
+        trackClick("linkedin_click")
+        window.open(linkedinUrl, "_blank")
+        setIsMenuOpen(false)
+      },
+    })
+  }
+  
+  if (emailUrl) {
+    menuItems.push({
+      key: "email",
+      icon: Mail,
+      label: t("eposta"),
+      color: "bg-white/10 border-white/20 text-white hover:bg-white/20",
+      onClick: () => {
+        trackClick("email_click")
+        window.location.href = emailUrl
+        setIsMenuOpen(false)
+      },
+    })
+  }
+  
+  if (settings.phone) {
+    menuItems.push({
+      key: "vcard",
+      icon: Download,
+      label: t("rehbereKaydet"),
+      color: "bg-white/10 border-white/20 text-white hover:bg-white/20",
+      onClick: () => {
+        handleVCardDownload()
+        setIsMenuOpen(false)
+      },
+    })
+  }
+
   return (
     <motion.div
-      className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50"
+      className="fixed bottom-6 right-6 z-50 action-bar-menu"
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: isVisible ? 0 : 100, opacity: isVisible ? 1 : 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/20 shadow-2xl flex items-center gap-2">
-        {whatsappUrl && (
-          <Button
-            size="sm"
-            className="bg-[#25D366] hover:bg-[#25D366]/90 rounded-xl"
-            onClick={() => {
-              trackClick("whatsapp_click")
-              window.open(whatsappUrl, "_blank")
-            }}
+      {/* Menu Items */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.9 }}
+            transition={{ duration: 0.2 }}
+            className="mb-3 bg-white/10 backdrop-blur-md rounded-2xl p-2 border border-white/20 shadow-2xl"
           >
-            <MessageCircle className="h-4 w-4 mr-1" />
-            <span className="hidden sm:inline">WhatsApp</span>
-          </Button>
+            <div className="flex flex-col gap-2">
+              {menuItems.map((item, index) => {
+                const Icon = item.icon
+                return (
+                  <motion.div
+                    key={item.key}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <Button
+                      size="sm"
+                      className={`w-full ${item.color} rounded-xl justify-start px-4 py-2.5`}
+                      onClick={item.onClick}
+                    >
+                      <Icon className="h-4 w-4 mr-2 flex-shrink-0" />
+                      <span className="text-sm whitespace-nowrap">{item.label}</span>
+                    </Button>
+                  </motion.div>
+                )
+              })}
+            </div>
+          </motion.div>
         )}
-        {phoneUrl && (
-          <Button
-            size="sm"
-            variant="outline"
-            className="bg-white/10 border-white/20 text-white hover:bg-white/20 rounded-xl"
-            onClick={() => {
-              trackClick("phone_click")
-              window.location.href = phoneUrl
-            }}
-          >
-            <Phone className="h-4 w-4 mr-1" />
-            <span className="hidden sm:inline">{t("ara")}</span>
-          </Button>
+      </AnimatePresence>
+
+      {/* Toggle Button */}
+      <Button
+        size="lg"
+        className="bg-primary hover:bg-primary/90 text-white rounded-full w-14 h-14 shadow-2xl p-0 flex items-center justify-center"
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        aria-label={isMenuOpen ? "Menüyü Kapat" : "Menüyü Aç"}
+      >
+        {isMenuOpen ? (
+          <X className="h-6 w-6" />
+        ) : (
+          <Menu className="h-6 w-6" />
         )}
-        {linkedinUrl && (
-          <Button
-            size="sm"
-            variant="outline"
-            className="bg-white/10 border-white/20 text-white hover:bg-white/20 rounded-xl"
-            onClick={() => {
-              trackClick("linkedin_click")
-              window.open(linkedinUrl, "_blank")
-            }}
-          >
-            <Linkedin className="h-4 w-4 mr-1" />
-            <span className="hidden sm:inline">LinkedIn</span>
-          </Button>
-        )}
-        {emailUrl && (
-          <Button
-            size="sm"
-            variant="outline"
-            className="bg-white/10 border-white/20 text-white hover:bg-white/20 rounded-xl"
-            onClick={() => {
-              trackClick("email_click")
-              window.location.href = emailUrl
-            }}
-          >
-            <Mail className="h-4 w-4 mr-1" />
-            <span className="hidden sm:inline">{t("eposta")}</span>
-          </Button>
-        )}
-        {settings.phone && (
-          <Button
-            size="sm"
-            variant="outline"
-            className="bg-white/10 border-white/20 text-white hover:bg-white/20 rounded-xl"
-            onClick={handleVCardDownload}
-          >
-            <Download className="h-4 w-4 mr-1" />
-            <span className="hidden sm:inline">{t("rehbereKaydet")}</span>
-          </Button>
-        )}
-      </div>
+      </Button>
     </motion.div>
   )
 }
