@@ -29,8 +29,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="tr" suppressHydrationWarning>
-      <body className={inter.className}>
+    <html lang="tr" suppressHydrationWarning className="dark" style={{ backgroundColor: '#000000' }}>
+      <body className={inter.className} style={{ backgroundColor: '#000000' }}>
         <MetaTags />
         <ThemeProvider>
           <LocaleProvider>{children}</LocaleProvider>

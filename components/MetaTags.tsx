@@ -4,7 +4,7 @@ import { useEffect } from "react"
 
 export default function MetaTags() {
   useEffect(() => {
-    // Theme color meta tag
+    // Theme color meta tag (for status bar and browser chrome)
     let themeColorMeta = document.querySelector('meta[name="theme-color"]')
     if (!themeColorMeta) {
       themeColorMeta = document.createElement("meta")
@@ -30,6 +30,19 @@ export default function MetaTags() {
       document.head.appendChild(msNavButtonMeta)
     }
     msNavButtonMeta.setAttribute("content", "#000000")
+
+    // Set HTML and body background to black immediately (for splash screen)
+    document.documentElement.style.backgroundColor = "#000000"
+    document.body.style.backgroundColor = "#000000"
+
+    // Chrome mobile browser bar color
+    let chromeThemeMeta = document.querySelector('meta[name="color-scheme"]')
+    if (!chromeThemeMeta) {
+      chromeThemeMeta = document.createElement("meta")
+      chromeThemeMeta.setAttribute("name", "color-scheme")
+      document.head.appendChild(chromeThemeMeta)
+    }
+    chromeThemeMeta.setAttribute("content", "dark")
   }, [])
 
   return null
