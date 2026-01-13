@@ -18,7 +18,7 @@ export default function Header() {
       const { data } = await supabase
         .from("settings")
         .select("key, value")
-        .in("key", ["whatsapp", "phone", "linkedin", "company_name"])
+        .in("key", ["whatsapp", "phone", "linkedin", "company_name", "logo_url"])
 
       if (data) {
         const settingsMap: Record<string, string> = {}
@@ -61,11 +61,19 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="relative w-10 h-10 flex items-center justify-center">
-              <div className="w-full h-full bg-gradient-to-br from-secondary to-primary rounded-lg flex items-center justify-center">
-                <span className="text-lg font-bold text-white">ET</span>
+            {settings.logo_url ? (
+              <img
+                src={settings.logo_url}
+                alt={settings.company_name || t("companyName")}
+                className="h-10 w-auto object-contain"
+              />
+            ) : (
+              <div className="relative w-10 h-10 flex items-center justify-center">
+                <div className="w-full h-full bg-gradient-to-br from-secondary to-primary rounded-lg flex items-center justify-center">
+                  <span className="text-lg font-bold text-white">ET</span>
+                </div>
               </div>
-            </div>
+            )}
             <h1 className="text-2xl font-bold text-white">
               {settings.company_name || t("companyName")}
             </h1>
