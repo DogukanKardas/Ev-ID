@@ -163,7 +163,7 @@ export default function AdminEmployees() {
       <div className="container mx-auto">
         <div className="mb-8 flex items-center gap-4">
           <Link href="/admin">
-            <Button variant="outline" className="bg-white/10 border-white/20 text-white">
+            <Button variant="outline">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Geri
             </Button>
@@ -283,7 +283,7 @@ export default function AdminEmployees() {
                   />
                 </div>
                 <div className="flex gap-2">
-                  <Button type="submit" className="flex-1 bg-primary hover:bg-primary/90">
+                  <Button type="submit" className="flex-1">
                     {editing ? "Güncelle" : "Ekle"}
                   </Button>
                   {editing && (

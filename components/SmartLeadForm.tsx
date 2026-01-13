@@ -242,7 +242,7 @@ export default function SmartLeadForm({ isOpen, onClose }: SmartLeadFormProps) {
                   id="name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="bg-white/10 border-white/20 text-white mt-2"
+                  className="bg-[#1A1A1A] border-white/20 text-white placeholder:text-white/40 mt-2"
                   placeholder={language === "en" ? "Enter your full name" : "Adınızı ve soyadınızı girin"}
                   required
                 />
@@ -256,7 +256,7 @@ export default function SmartLeadForm({ isOpen, onClose }: SmartLeadFormProps) {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="bg-white/10 border-white/20 text-white mt-2"
+                  className="bg-[#1A1A1A] border-white/20 text-white placeholder:text-white/40 mt-2"
                   placeholder={language === "en" ? "Enter your email" : "E-posta adresinizi girin"}
                   required
                 />
@@ -270,7 +270,7 @@ export default function SmartLeadForm({ isOpen, onClose }: SmartLeadFormProps) {
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="bg-white/10 border-white/20 text-white mt-2"
+                  className="bg-[#1A1A1A] border-white/20 text-white placeholder:text-white/40 mt-2"
                   placeholder={language === "en" ? "Enter your phone number" : "Telefon numaranızı girin"}
                   required
                 />
@@ -280,7 +280,7 @@ export default function SmartLeadForm({ isOpen, onClose }: SmartLeadFormProps) {
                   {language === "en" ? "Service You Are Interested In *" : "İlgilendiğiniz Hizmet *"}
                 </Label>
                 {loading ? (
-                  <div className="w-full h-10 rounded-md border border-white/20 bg-white/10 mt-2 flex items-center justify-center">
+                  <div className="w-full h-10 rounded-md border border-white/20 bg-[#1A1A1A] mt-2 flex items-center justify-center">
                     <span className="text-white/60 text-sm">
                       {language === "en" ? "Loading..." : "Yükleniyor..."}
                     </span>
@@ -290,14 +290,14 @@ export default function SmartLeadForm({ isOpen, onClose }: SmartLeadFormProps) {
                     id="service_interest"
                     value={formData.service_interest}
                     onChange={(e) => setFormData({ ...formData, service_interest: e.target.value, sub_category: "" })}
-                    className="w-full h-10 rounded-md border border-white/20 bg-white/10 text-white px-3 mt-2"
+                    className="w-full h-10 rounded-md border border-white/20 bg-[#1A1A1A] text-white px-3 mt-2 placeholder:text-white/40"
                     required
                   >
-                    <option value="">
+                    <option value="" className="bg-[#1A1A1A] text-white">
                       {language === "en" ? "Select..." : "Seçiniz..."}
                     </option>
                     {services.map((service) => (
-                      <option key={service.id} value={service.id}>
+                      <option key={service.id} value={service.id} className="bg-[#1A1A1A] text-white">
                         {language === "tr" && service.title_tr ? service.title_tr : service.title}
                       </option>
                     ))}
@@ -324,14 +324,14 @@ export default function SmartLeadForm({ isOpen, onClose }: SmartLeadFormProps) {
                       id="sub_category"
                       value={formData.sub_category}
                       onChange={(e) => setFormData({ ...formData, sub_category: e.target.value })}
-                      className="w-full h-10 rounded-md border border-white/20 bg-white/10 text-white px-3 mt-2"
+                      className="w-full h-10 rounded-md border border-white/20 bg-[#1A1A1A] text-white px-3 mt-2"
                       required
                     >
-                      <option value="">
+                      <option value="" className="bg-[#1A1A1A] text-white">
                         {language === "en" ? "Select..." : "Seçiniz..."}
                       </option>
                       {dynamicQ.options.map((opt) => (
-                        <option key={opt} value={opt}>
+                        <option key={opt} value={opt} className="bg-[#1A1A1A] text-white">
                           {opt}
                         </option>
                       ))}
@@ -347,7 +347,7 @@ export default function SmartLeadForm({ isOpen, onClose }: SmartLeadFormProps) {
                   id="company"
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  className="bg-white/10 border-white/20 text-white mt-2"
+                  className="bg-[#1A1A1A] border-white/20 text-white placeholder:text-white/40 mt-2"
                   placeholder={language === "en" ? "Enter company name" : "Şirket adını girin"}
                 />
               </div>
@@ -359,24 +359,24 @@ export default function SmartLeadForm({ isOpen, onClose }: SmartLeadFormProps) {
                   id="budget_range"
                   value={formData.budget_range}
                   onChange={(e) => setFormData({ ...formData, budget_range: e.target.value })}
-                  className="w-full h-10 rounded-md border border-white/20 bg-white/10 text-white px-3 mt-2"
+                  className="w-full h-10 rounded-md border border-white/20 bg-[#1A1A1A] text-white px-3 mt-2"
                 >
-                  <option value="">
+                  <option value="" className="bg-[#1A1A1A] text-white">
                     {language === "en" ? "Select..." : "Seçiniz..."}
                   </option>
                   {language === "en" ? (
                     <>
-                      <option value="0-50k">$0 - $10,000</option>
-                      <option value="50k-100k">$10,000 - $25,000</option>
-                      <option value="100k-250k">$25,000 - $50,000</option>
-                      <option value="250k+">$50,000+</option>
+                      <option value="0-50k" className="bg-[#1A1A1A] text-white">$0 - $10,000</option>
+                      <option value="50k-100k" className="bg-[#1A1A1A] text-white">$10,000 - $25,000</option>
+                      <option value="100k-250k" className="bg-[#1A1A1A] text-white">$25,000 - $50,000</option>
+                      <option value="250k+" className="bg-[#1A1A1A] text-white">$50,000+</option>
                     </>
                   ) : (
                     <>
-                      <option value="0-50k">0 - 50.000 TL</option>
-                      <option value="50k-100k">50.000 - 100.000 TL</option>
-                      <option value="100k-250k">100.000 - 250.000 TL</option>
-                      <option value="250k+">250.000 TL+</option>
+                      <option value="0-50k" className="bg-[#1A1A1A] text-white">0 - 50.000 TL</option>
+                      <option value="50k-100k" className="bg-[#1A1A1A] text-white">50.000 - 100.000 TL</option>
+                      <option value="100k-250k" className="bg-[#1A1A1A] text-white">100.000 - 250.000 TL</option>
+                      <option value="250k+" className="bg-[#1A1A1A] text-white">250.000 TL+</option>
                     </>
                   )}
                 </select>
@@ -389,24 +389,24 @@ export default function SmartLeadForm({ isOpen, onClose }: SmartLeadFormProps) {
                   id="timeline"
                   value={formData.timeline}
                   onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                  className="w-full h-10 rounded-md border border-white/20 bg-white/10 text-white px-3 mt-2"
+                  className="w-full h-10 rounded-md border border-white/20 bg-[#1A1A1A] text-white px-3 mt-2"
                 >
-                  <option value="">
+                  <option value="" className="bg-[#1A1A1A] text-white">
                     {language === "en" ? "Select..." : "Seçiniz..."}
                   </option>
                   {language === "en" ? (
                     <>
-                      <option value="acil">Urgent (within 1 month)</option>
-                      <option value="kisa">Short-term (1-3 months)</option>
-                      <option value="orta">Medium-term (3-6 months)</option>
-                      <option value="uzun">Long-term (6+ months)</option>
+                      <option value="acil" className="bg-[#1A1A1A] text-white">Urgent (within 1 month)</option>
+                      <option value="kisa" className="bg-[#1A1A1A] text-white">Short-term (1-3 months)</option>
+                      <option value="orta" className="bg-[#1A1A1A] text-white">Medium-term (3-6 months)</option>
+                      <option value="uzun" className="bg-[#1A1A1A] text-white">Long-term (6+ months)</option>
                     </>
                   ) : (
                     <>
-                      <option value="acil">Acil (1 ay içinde)</option>
-                      <option value="kisa">Kısa Vadeli (1-3 ay)</option>
-                      <option value="orta">Orta Vadeli (3-6 ay)</option>
-                      <option value="uzun">Uzun Vadeli (6+ ay)</option>
+                      <option value="acil" className="bg-[#1A1A1A] text-white">Acil (1 ay içinde)</option>
+                      <option value="kisa" className="bg-[#1A1A1A] text-white">Kısa Vadeli (1-3 ay)</option>
+                      <option value="orta" className="bg-[#1A1A1A] text-white">Orta Vadeli (3-6 ay)</option>
+                      <option value="uzun" className="bg-[#1A1A1A] text-white">Uzun Vadeli (6+ ay)</option>
                     </>
                   )}
                 </select>
@@ -432,7 +432,7 @@ export default function SmartLeadForm({ isOpen, onClose }: SmartLeadFormProps) {
                   id="message"
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="bg-white/10 border-white/20 text-white mt-2 min-h-[120px]"
+                  className="bg-[#1A1A1A] border-white/20 text-white placeholder:text-white/40 mt-2 min-h-[120px]"
                   placeholder={language === "en" ? "Tell us more about your needs..." : "İhtiyaçlarınız hakkında daha fazla bilgi verin..."}
                 />
               </div>

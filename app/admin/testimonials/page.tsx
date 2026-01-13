@@ -251,14 +251,13 @@ export default function AdminTestimonials() {
                   </Label>
                 </div>
                 <div className="flex gap-2">
-                  <Button type="submit" className="bg-primary hover:bg-primary/90">
+                  <Button type="submit">
                     {editing ? "Güncelle" : "Ekle"}
                   </Button>
                   {editing && (
                     <Button
                       type="button"
                       variant="outline"
-                      className="bg-white/10 border-white/20 text-white"
                       onClick={() => {
                         setEditing(null)
                         setFormData({
@@ -307,7 +306,6 @@ export default function AdminTestimonials() {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="bg-white/10 border-white/20 text-white"
                           onClick={() => handleEdit(testimonial)}
                         >
                           <Edit className="h-4 w-4" />

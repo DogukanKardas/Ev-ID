@@ -214,7 +214,7 @@ export default function AdminSettings() {
       <div className="container mx-auto max-w-2xl">
         <div className="mb-8 flex items-center gap-4">
           <Link href="/admin">
-            <Button variant="outline" className="bg-white/10 border-white/20 text-white">
+            <Button variant="outline">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Geri
             </Button>
@@ -269,7 +269,6 @@ export default function AdminSettings() {
                     type="button"
                     variant="outline"
                     onClick={() => fileInputRef.current?.click()}
-                    className="bg-white/10 border-white/20 text-white hover:bg-white/20"
                   >
                     <Upload className="h-4 w-4 mr-2" />
                     Dosya Seç
@@ -278,7 +277,6 @@ export default function AdminSettings() {
                     <Button
                       onClick={handleLogoUpload}
                       disabled={uploading}
-                      className="bg-primary hover:bg-primary/90"
                     >
                       {uploading ? "Yükleniyor..." : "Yükle"}
                     </Button>
@@ -311,7 +309,6 @@ export default function AdminSettings() {
                   />
                   <Button
                     onClick={() => handleSave(field.key, settings[field.key] || "")}
-                    className="bg-primary hover:bg-primary/90"
                   >
                     Kaydet
                   </Button>

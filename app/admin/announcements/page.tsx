@@ -94,7 +94,7 @@ export default function AdminAnnouncements() {
       <div className="container mx-auto">
         <div className="mb-8 flex items-center gap-4">
           <Link href="/admin">
-            <Button variant="outline" className="bg-white/10 border-white/20 text-white">
+            <Button variant="outline">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Geri
             </Button>
@@ -188,7 +188,7 @@ export default function AdminAnnouncements() {
                     Aktif
                   </Label>
                 </div>
-                <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
+                <Button type="submit" className="w-full">
                   {editing ? "Güncelle" : "Ekle"}
                 </Button>
               </form>
